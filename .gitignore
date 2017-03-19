@@ -1,0 +1,14 @@
+*.pyc
+*~
+.#*
+#*
+.cache
+build
+dist
+*.egg-info
+*.swp
+http/static
+#*.py#
+*.log
+*.tar.gz
+deb_dist
