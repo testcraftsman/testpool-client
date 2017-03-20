@@ -3,4 +3,4 @@ include README
 include README.md
 include CHANGES.rst
 include requirements.txt
-recursive-include testpool *.py
+include tplclient/*.py

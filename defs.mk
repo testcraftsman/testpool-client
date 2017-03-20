@@ -1,7 +1,7 @@
 SUBDEFS:=$(wildcard */defs.mk)
 SUBMODULES:=$(foreach module,$(SUBDEFS),$(dir $(module)))
 ROOT=$(shell git rev-parse --show-toplevel)
-PYTHONPATH:=$(ROOT):$(ROOT)/testpool/db
+PYTHONPATH:=$(ROOT)
 
 .PHONY: help
 help::
@@ -41,11 +41,7 @@ python27:: $(addsuffix .python27,$(PYTHON_FILES))
 .PHONY: test
 test:: subdirs
 
-.PHONY: debug_mark
-debug_mark:: 
-	grep --exclude=*~ --exclude=*.pickle --exclude=*.pyc -Hrn MARK */ && exit 1 || exit 0
-
-check:: pep8 pylint subdirs python27 test debug_mark
+check:: pep8 pylint subdirs python27 test
 clean::
 	find . -name "#*" -delete
 	find . -name ".#*" -delete

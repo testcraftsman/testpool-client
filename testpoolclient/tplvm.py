@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Testdb.  If not, see <http://www.gnu.org/licenses/>.
 """ Client python API to reserve VMs. """
-
 import json
 import time
 import requests
@@ -39,7 +38,7 @@ def _renew(*args, **kwargs):
     hndl.threading = threading.Timer(interval, _renew, args=(hndl,))
 
 
-class VMHndl(object):
+class Hndl(object):
     """ Acquires a VM and renews its usage until this object is deleted.
 
     As long as the object exists, the VM acquired will be renewed.

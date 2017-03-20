@@ -29,9 +29,6 @@ installation instruction for setting up a KVM hypervisor.
 
 import logging
 import pytest
-import testpool.core.database
-import testpool.core.commands
-import testpool.core.server
 import testpool.core.profile
 
 ##
@@ -48,11 +45,7 @@ GLOBAL = {"hostname": "127.0.0.1",
 def teardown_db():
     """ Remove the fake profile used by testing. """
 
-    # logging.info("teardown database")
-    # arg_parser = testpool.core.commands.main()
-    # cmd = "profile remove %(hypervisor)s %(profile)s --immediate" % GLOBAL
-    # args = arg_parser.parse_args(cmd.split())
-    # assert testpool.core.commands.args_process(None, args) == 0
+
     profiles = testpool.core.profile.profile_list()
     for profile in profiles:
         if profile.hv.product != "fake":

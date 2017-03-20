@@ -26,7 +26,7 @@ As these examples are running, use virt-manager to see the hypervisor change.
 """
 import time
 import unittest
-import testpool.client
+from testpoolclient import tplvm
 import conftest
 
 
@@ -38,8 +38,8 @@ class Testsuite(unittest.TestCase):
 
         Acquire a single VM. Demonstrate how to determine the VMs IP address.
         """
-        hndl = testpool.client.VMHndl(conftest.GLOBAL["hostname"],
-                                      conftest.GLOBAL["profile"], 10, True)
+        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
+                          conftest.GLOBAL["profile"], 10, True)
         current_vms = hndl.detail_get()["vm_available"]
         hndl.acquire()
         ##
@@ -68,8 +68,8 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        with testpool.client.VMHndl(conftest.GLOBAL["hostname"],
-                                    conftest.GLOBAL["profile"], 10) as hndl:
+        with tplvm.Hndl(conftest.GLOBAL["hostname"],
+                        conftest.GLOBAL["profile"], 10) as hndl:
             ##
             # This assert is to show that a different VM was picked.
             self.assertTrue(hndl.vm.id is not None)
@@ -82,8 +82,8 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        hndl = testpool.client.VMHndl(conftest.GLOBAL["hostname"],
-                                      conftest.GLOBAL["profile"], 10)
+        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
+                          conftest.GLOBAL["profile"], 10)
         details = hndl.detail_get()
         self.assertTrue(details)
         self.assertEqual(details["vm_max"], 3)
@@ -100,9 +100,8 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         for count in range(3):
-            with testpool.client.VMHndl(conftest.GLOBAL["hostname"],
-                                        conftest.GLOBAL["profile"],
-                                        10, True) as hndl:
+            with tplvm.Hndl(conftest.GLOBAL["hostname"],
+                            conftest.GLOBAL["profile"], 10, True) as hndl:
                 ##
                 # This assert is to show that a different VM was picked.
                 self.assertTrue(hndl.vm)
@@ -110,8 +109,8 @@ class Testsuite(unittest.TestCase):
                 ##
         ##
 
-        hndl = testpool.client.VMHndl(conftest.GLOBAL["hostname"],
-                                      conftest.GLOBAL["profile"], 10, True)
+        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
+                          conftest.GLOBAL["profile"], 10, True)
         hndl.acquire(True)
         self.assertTrue(hndl.vm.ip_addr not in ip_addresses)
         hndl.release()
