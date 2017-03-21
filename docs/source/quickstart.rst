@@ -3,126 +3,36 @@
 Quick Start
 ===============
 
-Testpool clones VMs from a template VM. Testpool monitors each VM waiting for their management
-interface to be assgiend an IP address, usually through DHCP. Once assigned,
-Testpool makes the VM available for users. Users acquire a VM and then release
-it when done. Where Testpool replaces the VM with a fresh clone. Cloning 
-VMs can take a considerable amount of time. Testpool manages the VMs so
-that acquiring VMs is immediate.
+Testpool-client provides a python library for `Testpool <http://testpool-client.readthedocs.io/en/latest/>`_  on top of Testpool's REST interface.
 
-Normally Testpool is installed on a central server and configured to
-manager several hypervisors. Testpool supports KVM which is required for 
-this demonstration. 
-
-To expedite this guide, Testpool content will be installed on the KVM 
-hypervisor. For final installation, Testpool can be installed either the 
-hypervisor or a separate system. The differences will be identified during 
-the installation steps.
+Before continuing, Testpool needs to be setup. The fastest way is to 
+go through Testpool's `quick start <http://testpool.readthedocs.io/en/latest/quickstart.html>`_. Once Testpool is setup, return to this guide.
 
 
-KVM Installation 
-----------------
+Testpool-client Installation
+----------------------------
 
-For this quick start guide, we'll need a single VM named test.template on 
-the hypervisor which is off and ready to be cloned.  What the VM is running is
-not important and there are good instructions on the internet for setting up a
-KVM hypervisor and creating a VM. This section will provide references to
-these sites.
+We'll run the examples from the git repository.
 
-For installing KVM on Ubuntu 16.04, refer to this site https://help.ubuntu.com/community/KVM/Installation. Once complete, you will need the following 
-information:
+  #. Download testpool-client from github release area::
 
-  - user and password that can install VMs. This is the user that is part of
-    the libvirtd and kvm groups. 
-  - IP Address of the KVM hypervisor if Testpool is not running on the
-    hypervisor
+       wget https://github.com/testcraftsman/testpool-client/archive/v0.1.0.tar.gz
+       tar -xf testpool-client-0.1.0.tar.gz
 
-For the rest of this guide, we'll assume the user tadmin with password 
-as 'password'. Since testpool will be installed on the hypervisor, so the IP
- address used is localhost.
-
-Now a single VM is required which represents the template that is managed
-and cloned by Testpool. Using virt-manager, these instructions will create
-an Ubuntu 16.04 server VM.
-
-  #. sudo apt-get install virt-manager
-  #. Run virt-manager
-  #. From File, choose *Add Connection*.
-  #. If applicable, choose *Connect to remote host*
-  #. Enter admin for **Username** and IP address for the **Hostname**. This may
-     be either localhost or the IP address of the KVM hypervisor.
-     The default ssh method will probably work.
-  #. Now connect and enter the user password.
-  #. Select Hypervisor in the virt-manager,
-  #. Choose **Create a new virtual manager**.
-  #. Choose **Network Install (HTTP, FTP or NFS)** then Forward.
-  #. For URL, enter **http://us.archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/** The URL changes periodically, check the ubuntu site for the 
-     latest valid links.
-
-
-Testpool Installation
----------------------
-
-We'll install Testpool from source.
-
-  #. Download testpool from github release area::
-
-       wget https://github.com/testcraftsman/testpool/archive/v0.0.7.tar.gz
-       tar -xf testpool-0.0.7.tar.gz
-
-  #. Install several required packages::
-
-       cd testpool
-       cat requirements.system | sudo xargs apt-get install
-       sudo apt-file update
-       sudo pip install -qr requirements.txt
-       sudo pip install easydict
-       sudo pip install django-pure-pagination==0.2.1
-       sudo pip install django-split-settings==0.1.3
-       sudo apt-get -f install
-
-  #. Create debian packages,in  a shell run::
-
-       make deb.build
-
-  #. Install Testpool server, Ina shell run::
-
-  #. Run Testpool database. In a shell run::
-
-       cd ../..
-       ./bin/tpl-db runserver -v 3
-
-  #. In a second shell, run the Testpool daemon::
-
-       cd testpool
-       ./bin/tpl-daemon -v
 
 A Short Tour
 ------------
 
-In order for Testpool to manage VMs, Hypervisor information is registered
-with the Testpool along with a name of a single VM template.
-
-Create a VM on the KVM hypervisor called test.template and keep it shutdown. Now create a testpool profile given the IP address and name of the VM template.
-Since we're running on the hypervisor, the IP address is localhost.
-
-Where hypervisor-ip is replaced with the actual Hypervisor IP address.  While 
-running testpool on the hypervisor, use the tpl CLI to create a test pool 
-profile::
+Using the profile established in the Testpool `quickstart <http://testpool.readthedocs.io/en/latest/quickstart.html>`_ guide, as shown below::
 
   ./bin/tpl profile add example kvm qemu:///system test.template 3
 
-Confirm the profile is valid::
+The example directory in this repository provides an an example on how to
+use the python API. The example is written as a py.test which means to see
+it in action::
 
-  ./bin/tpl profile detail example
+  py.test -s example/python_api.py
 
-The Testpool Daemon will clone 3 VMs from the test.template. This can take
-a while which is the point of this product. In that, Testpool generates
-new clean clones based on test.template. The VMs available line in the detail
-output shows the current number of available VMs. Use **virt-manager** to see
-the VMs being created. 
-
-From this point, Testpool is cloning VMs for use, the examples folder relies on
-this configuration to run. Refer to the example below to see how to use Testpool.
+Please refer to the file's documentation.
 
 .. literalinclude:: /../../examples/python_api.py

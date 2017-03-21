@@ -14,3 +14,13 @@ Testpool
 tpl
 txt
 virt
+vm
+dch
+py
+testpool
+xargs
+gz
+cd
+xf
+wget
+Indices
