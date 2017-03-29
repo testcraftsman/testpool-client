@@ -3,16 +3,16 @@
 Installation
 ************
 
-Getting Testpool
-================
+Getting Testpool-client
+=======================
 
 If you want the latest code you'll need a `GitHub <http://www.github.com/>`_ account. This is also where we track issues and feature request. This code
-is committed into <http://guthub.com/testcraftsman/testpool>.
+is committed into <http://guthub.com/testcraftsman/testpool-client>.
 
 What is Installed
 =================
 
-Testpool consists of:
+Testpool-client consists of:
   #. a KVM hypervisor 
   #. A test pool database installed on an Ubuntu 16.04 system, which can be on the 
      KVM hypervisor

@@ -1,9 +1,9 @@
 """
-Examples on how to call the Testpool REST interfaces. Read the quick start
-guide in order to configure Testpool and then come back to this script.
+Examples on how to call the Testpool-client  API. Read the quick start
+guide in order to configure Testpool server :and then come back to this script.
 
-As discussed in the quickstart guide. This example uses a Testpool profile
-named example. These examples work best when all VMs have been cloned
+As discussed in the Testpool-client quickstart guide. This example uses a 
+profile named example. These examples work best when all VMs have been cloned
 and have retrieved their IP address.  Make sure VMs are avaliable, run:
 
   ./bin/tpl profile list
@@ -15,12 +15,11 @@ To run this file type
 These examples illustrates the use of the testpool.client. The global variable
 GLOBAL in conftest defines the Testpool profile. Once a VM is acquired, this
 test can login and use the VM throughout the entire testsuite. This assumes
-that the VM has negotiated an IP address usually throught DHCP.
+that the VM has negotiated an IP address using DHCP.
 
-This example checks for a hypervisor profile named example. If
-one does not exist, a fake profile is created.  A fake.profile is used
-to show examples without having to take the time to configure an actual
-hypervisor.
+This example checks for a hypervisor profile named example. If one does not
+exist, a fake profile is created.  A fake.profile is used to show examples
+without having to take the time to configure an actual hypervisor.
 
 As these examples are running, use virt-manager to see the hypervisor change.
 """

@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Testdb.  If not, see <http://www.gnu.org/licenses/>.
 
-""" Populate test database for examples.
+""" Populate test database with an example.
 
 Check to see if the user has created an example test profile, if not
 create a fake example profile. A fake example profile uses an in memory
 pretent hypervisor. This is sufficient for seeing the Testpool client
-API in action and for debugging.
+API in action and for debugging. However following the Quickstart 
+guide in Testpool shows how to provide an example profile for a KVM 
+hypervisor.
 
 This code would normally not be required. Refer to the quick start guide or
 installation instruction for setting up a KVM hypervisor.
@@ -34,13 +36,12 @@ import testpool.core.profile
 ##
 # In order to run the examples against a real hypervisor, change this
 # IP address. These values are identical to the quick start guide on
-# purpose.
+# purpose. All that is needed, is a VM called test.template.
 GLOBAL = {"hostname": "127.0.0.1",
           "connection": "qemu:///system",
           "profile": "example",
           "count": 3}
 ##
-
 
 def teardown_db():
     """ Remove the fake profile used by testing. """
