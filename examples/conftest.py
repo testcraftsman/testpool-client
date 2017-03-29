@@ -20,8 +20,8 @@
 Check to see if the user has created an example test profile, if not
 create a fake example profile. A fake example profile uses an in memory
 pretent hypervisor. This is sufficient for seeing the Testpool client
-API in action and for debugging. However following the Quickstart 
-guide in Testpool shows how to provide an example profile for a KVM 
+API in action and for debugging. However following the Quickstart
+guide in Testpool shows how to provide an example profile for a KVM
 hypervisor.
 
 This code would normally not be required. Refer to the quick start guide or
@@ -43,9 +43,9 @@ GLOBAL = {"hostname": "127.0.0.1",
           "count": 3}
 ##
 
+
 def teardown_db():
     """ Remove the fake profile used by testing. """
-
 
     profiles = testpool.core.profile.profile_list()
     for profile in profiles:

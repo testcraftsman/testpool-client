@@ -2,7 +2,7 @@
 Examples on how to call the Testpool-client  API. Read the quick start
 guide in order to configure Testpool server :and then come back to this script.
 
-As discussed in the Testpool-client quickstart guide. This example uses a 
+As discussed in the Testpool-client quickstart guide. This example uses a
 profile named example. These examples work best when all VMs have been cloned
 and have retrieved their IP address.  Make sure VMs are avaliable, run:
 
