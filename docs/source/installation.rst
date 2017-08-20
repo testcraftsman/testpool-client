@@ -6,7 +6,9 @@ Installation
 Getting Testpool-client
 =======================
 
-Testpool is installed from source, download the latest from `GitHub <http://www.github.com/testcraftsman/testpool-client/releases>`_. This is also where we track issues and feature request.
+Testpool is installed from source, download the latest from `GitHub <http://www.github.com/testcraftsman/testpool-client/releases>`_. This is also where we track issues and feature request. Make sure to download the version that 
+matches the installed Testpool. If Python-testpool version X.Y.Z-M. Install 
+any version of this client starting with X.Y.W. Where W can be any value.
 
 What is Installed
 =================
