@@ -1,12 +1,13 @@
 """
-Examples on how to call the Testpool-client  API. Read the quick start
-guide in order to configure Testpool server :and then come back to this script.
+Examples on how to call the Testpool-client  API. Read the Testpool quick start
+guide in order to configure the Testpool server :and then come back to this
+script.
 
 As discussed in the Testpool-client quickstart guide. This example uses a
 profile named example. These examples work best when all VMs have been cloned
 and have retrieved their IP address.  Make sure VMs are avaliable, run:
 
-  ./bin/tpl profile list
+  tpl profile list
 
 To run this file type
 
@@ -25,7 +26,7 @@ As these examples are running, use virt-manager to see the hypervisor change.
 """
 import time
 import unittest
-from testpoolclient import tplvm
+from testpoolclient import resource
 import conftest
 
 

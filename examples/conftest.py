@@ -7,7 +7,7 @@ create a fake example profile. A fake example profile uses an in memory
 pretent hypervisor. This is sufficient for seeing the Testpool client
 API in action and for debugging. However following the Qickstart
 guide in Testpool shows how to provide an example profile for a KVM
-hypervisor.
+hypervisor.ster1
 
 This code would normally not be required. Refer to the quick start guide or
 installation instruction for setting up a KVM hypervisor.

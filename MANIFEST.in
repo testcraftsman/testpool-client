@@ -3,4 +3,4 @@ include README
 include README.md
 include CHANGES.rst
 include requirements.txt
-include tplclient/*.py
+include testpoolclient/*.py
