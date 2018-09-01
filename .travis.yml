@@ -1,21 +1,18 @@
 language: python
 python:
-  - '2.7'
+- '2.7'
 before_install:
-  - sudo -H apt-get update -qq
-  - sudo -H cat requirements.system | sudo xargs apt-get -y install
+- sudo -H apt-get update -qq
+- sudo -H cat requirements.system | sudo xargs apt-get -y install
 install:
-  - pip install -r requirements.txt 
-  - pip install -r requirements.dev 
-#  - make check
+- pip install -r requirements.txt
+- pip install -r requirements.dev
 script:
-  - make build
+- make build
 deploy:
   provider: releases
-  skip_cleanup: true
-  file: 'dist/*.tar.gz'
-  on:
-    all_branches: true
-    tags: true
   api_key:
-    secure: e6AAUXpsO+U+5KRscUnTwDmLFOF/n1vzCv1nhcA3WUWdGwddpTpmqOGiNRC8mPEX3aJpI/wjcdTRFeRSB1MfbKNprzuBa5D6OhawMUIOc4o2cCQrK8Aua4Ue8RVWQXRR6kx3owgY4NfXpuMNZ9maL0PtZVuWSQTZLRiMVFNNWy1K+Ux6vcQlIJGrbrqspmHbRkUoQM1SmoKH2x4kFfbjpJ2V5OHkHKgaPr/j+9sTUZdyxTCVKMmjDzY51p92Q7jk5TtWFDyEqhXMv3M4ktHGllovE56o5R1/8K0/IrpIbgFb3eRmodg8krqxa3vXRw3s51wxpUd7g8fGPHRwaGc3TNg9JpHOnUy4swg+4pq2eXusewVJkp8jdEtGMVRvtuHdixpNIAWRpnvtsynd2eDSHlxfmeYOOnbAF9/dOLFFgBu/9tf0a+xxd1fMskiD4Mg3ceHgfrXLVTZrhkH2GtRyaAq0n7vJlkVsVjDqaKooLu/FdWwPSSIM+sMT5AtYdVxK2lSYpCIte4G3XFhojTjpeSRayMv/cQ88Vp9eYZR8WzESURuufUgX9egCAIyiTxopmUfY7ek9k8+3bRF85zuxHBtQ44alVuTULjpY6LdOiGCqbcw/29AXgW6YRWWnD6MawO7Ic5h5/sbAyXGJGoaYyYWEkFfOtHxUd8V443FuiuM=
+    secure: JTrhJ59Azk+CpuoF83uIyBBbxdMdtTko+2PctuJT+L5q84KAUb37630pxCm/FyxQ7Z/7SE4xFgsd+svkEWuMj3hj7wVP7bzQGNlRSpiXtFuKTqpdj2P/EFbYHbzJlWv6VP8p0YGkFso+d155v71kzCexuHAev6uOY7OYD+PunaQvetkfOyyXHtm2huxNvxyuZqm7vM2giF9GKoZBCQe0D3Ji2drrRxcWpL9gUYQgLzANdLHzwsTZRf2H2u4FMun97AhyFIV0rfc638ATalfNdf9Qbvxlvexc9zw24BgNYkYkZg35H/J5+AuuNZksZA5Jf7j1rrWdbq8vu1EqbW+AqBsVqtaNe0w5CuBwY45nY9qRqr8fzT66pmoi35LOzVPpZxH7vU8kzyVk/ZWKiLiFwPhTE19sZ1CwwcD4BQM4G5n5XnXR2jwOsW9xq0AhA7XLtyQ9HIF7vzVmfs99qLsJgc45w2YpX1SZinjxTHrM6Qc5+pTSbFHVgdyaM1CZNZLese80oJa9yMT9HZ52QdL4zLtKIGaJxF+bU1O0CCTPJdkQ91eQms1vnIcu/MXgLYCb+AASdj576waiG+4+TOQz0uDSv7i/zfQZ7hdRRg0C62NrvhK9Qe1dT/Wb8TEAvu5YBQqdG/i2FiQ86baRMrve0e423kUnSqHmrSpjmF4YXyo=
+  file: dist/*.tar.gz
+  on:
+    repo: testcraftsman/testpool-client
