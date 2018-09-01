@@ -1,9 +1,13 @@
+os: linux
+dist: bionic
+sudo: required
 language: python
 python:
   - '2.7'
 before_install:
   - sudo -H apt-get update -qq
   - sudo -H cat requirements.system | sudo xargs apt-get -y install
+  - sudo apt-get install -y dpkg
   - wget https://github.com/testcraftsman/testpool/releases/download/0.1.9/python-testpool_0.1.9-1_all.deb
   - sudo dpkg -i python-testpool_0.1.9-1_all.deb
 install:
