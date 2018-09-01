@@ -36,4 +36,4 @@ pycodestyle::
 	pycodestyle --exclude=testpool/db/testpooldb/migrations $(PYTHON_FILES)
 
 build::
-	python ./setup.py build
+	python ./setup.py sdist
