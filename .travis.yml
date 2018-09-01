@@ -11,8 +11,11 @@ script:
 - make build
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key:
     secure: QAnmQM/siokJRjh4K3ie8SKPq08xDgGyX3lQB3wkoXrOL01Bd1a6D9CpflNOCuuHZcXAlZ7usRYeOzcAsuGXDGfmoT+sCi5mRXIUAOlbjelx0zHJVZzuB7H4x5ytfpBpvEq2Us0Bemqetiz7OexWpCtlw9e/VCxpZxM7ztlh1WzzHZ6YZ758E1+5o4/4iBVSeu8ezQSnkP1KmLtXfLPgc+hiKaPQg0hJJlGswd1QPE0QSHfC4r0pH8cGjFja2W+rkor3AHa+Gx7vQeayzNNcXWNj9MzhLq30H+uBdH2JPNiwuqkvgnflC7BbzL2R9uhSkMyoTdk4qcusXzw1y6F9DWRBVDPeFRytT9PWz+6sBtPDGf6tNGVzOYOS4bOGueP6QW+dtU/qYa/qmC/X31sxbQxHc08XUtaEHitqMxaYBGXZkuGNSvxBSR8Fn8GAmjc9PtQ4N13JjP9dykBsFZo89wuy5aUPOqduV0pvVA0jm+hkE+ONjCOPCzSPJeTXK7YGOY1cJjcD23ZJ1moSDckDZx3sfTd0PAeYonRpDODwkgAMqQFvJqr4o/QpiRBTmDo+UNB2Q8MEE5fxxGYvLvJvsAR/oV0x8Yq8uRLPbKIC6yyVphw+UlUvk2D67Z2yPzhtgE9fzkOIsf+F27LgyHpvfJhqpa+cKlToOHCvntRpB9I=
   file: dist/*.tar.gz
   on:
+    tags: true
+    all_branches: true
     repo: testcraftsman/testpool-client
