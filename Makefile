@@ -5,10 +5,18 @@ PYTHON=`which python`
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/testpool
 PROJECT=testpool
-export VERSION:=`python ./setup.py --version`
+export VERSION:=`git describe --abbrev=0 --tag`
+
+
+##
+# Use find when __init__.py does not exist in the directory.
+PYTHON_FILES+=testpoolclient *.py
+PYTHON_FILES+=`find ./examples -type f -name '*.py' -printf '%p '`
+##
 
 info::
 	@echo "version ${VERSION}"
+	@echo "PYTHON_FILES=${PYTHON_FILES}"
 
 clean::
 	python ./setup.py clean
@@ -23,6 +31,9 @@ help::
 	@echo "make install - Install on local system"
 	@echo "make build - Generate a rpm package"
 	@echo "make clean - Get rid of scratch and byte files"
+
+pycodestyle::
+	pycodestyle --exclude=testpool/db/testpooldb/migrations $(PYTHON_FILES)
 
 build::
 	python ./setup.py build

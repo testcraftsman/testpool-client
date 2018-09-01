@@ -93,7 +93,6 @@ class Hndl(object):
                 raise ResourceError("all VMs busy or pending")
         return None
 
-
     def release(self):
         """ Release VM resource. """
 

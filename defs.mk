@@ -6,7 +6,8 @@ PYTHONPATH:=$(ROOT)
 .PHONY: help
 help::
 	echo "pylint - run pylint on python files."
-	echo "pep8 - run pep8 on python files."
+	echo "pycodestyle  - run pycodestyle on python files."
+	echo "check - run pylint and pycodestyle."
 
 .PHONY: subdirs $(SUBMODULES)
 $(SUBMODULES):
@@ -28,9 +29,7 @@ pylint:: $(addsuffix .pylint,$(PYTHON_FILES)) subdirs
 %.pep8:
 	pep8 $*
 
-.PHONY: pep8
-pep8:: $(addsuffix .pep8,$(PYTHON_FILES)) subdirs
-
+pycodestyle::
 
 %.python27:
 	python -m compileall $*
@@ -41,7 +40,7 @@ python27:: $(addsuffix .python27,$(PYTHON_FILES))
 .PHONY: test
 test:: subdirs
 
-check:: pep8 pylint subdirs python27 test
+check:: pycodestyle pylint python27 test
 clean::
 	find . -name "#*" -delete
 	find . -name ".#*" -delete

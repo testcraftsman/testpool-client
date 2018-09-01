@@ -3,13 +3,14 @@ import logging
 import os
 import pkgutil
 import subprocess
-from subprocess import call
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-import testpool.version
 
 AUTHOR = "Mark Hamilton"
 AUTHOR_EMAIL = "mark.lee.hamilton@gmail.com"
+
+CMD = "git describe --abbrev=0 --tag"
+VERSION = subprocess.check_output(CMD, shell=True).replace("\n", "")
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
