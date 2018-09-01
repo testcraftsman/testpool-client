@@ -14,6 +14,8 @@ deploy:
   api_key:
     secure: M7Hdiw6jiG28q3FjLqL016iVEAIBIyzRHixhrV+3TEV2wycySBfOz4dYQ7gEBRSNAacMn5vUVisf/Ipx0aAogEbWETyeqUWgb4aPpBj8RUqTu799asMRCZCt80nlaSA2WsSncZX8iaLAvp+GVXnZPvSe7DfDlQMAh/tkpbFuwskSqxLquYRZxHT9kZzoqJVUG5tiYvQz+3PDdOEU3ej0WcJ+ZpZ5Mbi/eXx3VXVTnGEnUyyGUhrgFNLS0MGzwcDcAcwUxaqPVaY8mppPN3cNv/ztrdeNc6SjM8IQAdHPO6Ey2p/J2/YQUfAGZxf54B/Xctu1a3qVeM8KxmG48hkG/3IsDzpO2Lo+yow4WMv7xXnmjbzy9TH52NAGy/3JEhE/2swnqzpdXZwK8OuPcY2LTDbUwk2v1/hzMkKH11GeOP96CFuaS+W2BDdZF+gBNgpNh7e5eqv3ufVKoxOLom2L3NVBOz3/0VIqR285+gDXt6c7LR1HnwGQ9SE0WyeuEROZy7ocUU6NFfnlICjGPQA4zTTWu57YAMttEOrjCayO63MHuZ70QtE1kb9jISLPqbZibEyS5pEM3gOfqxBO3+NZNOzHqoZZ8zoAuSNjG59T5r2KCT/I5DncLDM+uZGZnMJMDcoPemQdM7TzMVy6E2jciG2YGe1la0HiRHcuUYQzRxA=
   file: dist/*.tar.gz
+  file_glob: true
   on:
+    repo: testcraftsman/testpool-client
     tags: true
     all_branches: true
