@@ -10,8 +10,7 @@ export VERSION:=`git describe --abbrev=0 --tag`
 
 ##
 # Use find when __init__.py does not exist in the directory.
-PYTHON_FILES+=testpoolclient *.py
-PYTHON_FILES+=`find ./examples -type f -name '*.py' -printf '%p '`
+PYTHON_FILES+=*.py testpoolclient examples 
 ##
 
 info::
