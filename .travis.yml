@@ -4,6 +4,8 @@ python:
 before_install:
   - sudo -H apt-get update -qq
   - sudo -H cat requirements.system | sudo xargs apt-get -y install
+  - wget https://github.com/testcraftsman/testpool/releases/download/0.1.9/python-testpool_0.1.9-1_all.deb
+  - sudo dpkg -i python-testpool_0.1.9-1_all.deb
 install:
   - pip install -r requirements.txt
   - pip install -r requirements.dev
