@@ -26,7 +26,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup_args = {
     "name": 'testpool-client',
-    "version": "0.0.1",
+    "version": VERSION,
     "packages": find_packages(),
     "include_package_data": True,
     "license": 'GPLv3',
