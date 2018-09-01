@@ -38,8 +38,8 @@ class Testsuite(unittest.TestCase):
 
         Acquire a single VM. Demonstrate how to determine the VMs IP address.
         """
-        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
-                          conftest.GLOBAL["profile"], 10, True)
+        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
+                             conftest.GLOBAL["profile"], 10, True)
         current_vms = hndl.detail_get()["vm_available"]
         hndl.acquire()
         ##
@@ -68,8 +68,8 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        with tplvm.Hndl(conftest.GLOBAL["hostname"],
-                        conftest.GLOBAL["profile"], 10) as hndl:
+        with resource.Hndl(conftest.GLOBAL["hostname"],
+                           conftest.GLOBAL["profile"], 10) as hndl:
             ##
             # This assert is to show that a different VM was picked.
             self.assertTrue(hndl.vm.id is not None)
@@ -82,8 +82,8 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
-                          conftest.GLOBAL["profile"], 10)
+        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
+                             conftest.GLOBAL["profile"], 10)
         details = hndl.detail_get()
         self.assertTrue(details)
         self.assertEqual(details["vm_max"], 3)
@@ -100,8 +100,8 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         for count in range(3):
-            with tplvm.Hndl(conftest.GLOBAL["hostname"],
-                            conftest.GLOBAL["profile"], 10, True) as hndl:
+            with resource.Hndl(conftest.GLOBAL["hostname"],
+                               conftest.GLOBAL["profile"], 10, True) as hndl:
                 ##
                 # This assert is to show that a different VM was picked.
                 self.assertTrue(hndl.vm)
@@ -109,8 +109,8 @@ class Testsuite(unittest.TestCase):
                 ##
         ##
 
-        hndl = tplvm.Hndl(conftest.GLOBAL["hostname"],
-                          conftest.GLOBAL["profile"], 10, True)
+        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
+                             conftest.GLOBAL["profile"], 10, True)
         hndl.acquire(True)
         self.assertTrue(hndl.vm.ip_addr not in ip_addresses)
         hndl.release()
