@@ -32,7 +32,7 @@ help::
 	@echo "make clean - Get rid of scratch and byte files"
 
 pycodestyle::
-	pycodestyle --exclude=testpool/db/testpooldb/migrations $(PYTHON_FILES)
+	pycodestyle $(PYTHON_FILES)
 
 build::
 	python ./setup.py sdist

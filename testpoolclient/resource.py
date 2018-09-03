@@ -11,6 +11,7 @@ import testpool.core.exceptions
 
 
 class ResourceError(testpool.core.exceptions.TestpoolError):
+    """ Thrown when a resource is not available. """
     def __init__(self, message):
         super(testpool.core.exceptions.TestpoolError, self).__init__(message)
 
@@ -45,6 +46,7 @@ class Hndl(object):
 
     def __enter__(self):
         """ Operations are handled in the constructor. """
+
         self.acquire(self.blocking)
         return self
 
@@ -106,7 +108,7 @@ class Hndl(object):
 
         ##
         # This should be a config.
-        url = "http://%s:8000/testpool/api/" % self.ip_addr
+        url = "http://%s:8000/testpool/api/v1/" % self.ip_addr
         return url + "profile/%s/%s" % (action, self.profile_name)
 
     def detail_get(self):

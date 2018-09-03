@@ -16,31 +16,36 @@ installation instruction for setting up a KVM hypervisor.
 
 import logging
 import pytest
-import testpool.core.pool
+import testpoolclient.pool
+
 
 ##
 # In order to run the examples against a real hypervisor, change this
 # IP address. These values are identical to the quick start guide on
 # purpose. All that is needed, is a VM called test.template.
-GLOBAL = {"hostname": "127.0.0.1",
-          "connection": "qemu:///system",
-          "profile": "example",
-          "count": 3}
+class Global(object):
+    def __init__(self, name, connection, product, template_name, count):
+        self.name = name
+        self.connection = connection
+        self.product = product
+        self.template_name = template_name
+        self.count = count
+
+
 ##
+# "connection": "qemu:///system",
+GLOBAL = Global("testpoolexample", "127.0.0.1", "fake",  "test.template", 3)
 
 
 def teardown_db():
     """ Remove the fake profile used by testing. """
 
-    profiles = testpool.core.pool.profile_list()
-    for profile in profiles:
-        if profile.hv.product != "fake":
+    pool_mgr = testpoolclient.pool.Manager("127.0.0.1")
+    pools = pool_mgr.list()
+    for pool in pools:
+        if pool["name"] != GLOBAL.name:
             continue
-        if profile.name != GLOBAL["profile"]:
-            continue
-        if profile.hv.connection != GLOBAL["connection"]:
-            continue
-        testpool.core.pool.profile_remove(GLOBAL["profile"], True)
+        pool_mgr.remove(GLOBAL.name, True)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -53,11 +58,11 @@ def setup_db(request):
     # create a fake example profile. This code would normally not be
     # required. Refer to the quick start guide or installation instruction
     # for setting up a KVM hypervisor.
-    profiles = testpool.core.pool.profile_list()
-    profiles = [item for item in profiles if item.name == GLOBAL["profile"]]
-    if len(profiles) == 0:  # pylint: disable=len-as-condition
-        testpool.core.profile.profile_add(GLOBAL["connection"], "fake",
-                                          GLOBAL["profile"], GLOBAL["count"],
-                                          "test.template")
+    pool_mgr = testpoolclient.pool.Manager(GLOBAL.connection)
+    pools = pool_mgr.list()
+    pools = [item for item in pools if item["name"] == GLOBAL.name]
+    if len(pools) == 0:  # pylint: disable=len-as-condition
+        pool_mgr.add(GLOBAL.name, GLOBAL.product, GLOBAL.connection,
+                     GLOBAL.template_name, GLOBAL.count)
 
     request.addfinalizer(teardown_db)

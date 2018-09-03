@@ -27,20 +27,19 @@ As these examples are running, use virt-manager to see the hypervisor change.
 import time
 import unittest
 from testpoolclient import resource
-import conftest
+from conftest import GLOBAL
 
 
 class Testsuite(unittest.TestCase):
     """ Demonstrate testpool.client API. """
 
-    def test_vm_acquire(self):
-        """ test_vm_acquire.
+    def test_resource_acquire(self):
+        """ test_resource_acquire.
 
         Acquire a single VM. Demonstrate how to determine the VMs IP address.
         """
-        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
-                             conftest.GLOBAL["profile"], 10, True)
-        current_vms = hndl.detail_get()["vm_available"]
+        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10, True)
+        current_vms = hndl.detail_get()["resource_available"]
         hndl.acquire()
         ##
         # The ip attribute provides the IP address of the VM.
@@ -51,25 +50,24 @@ class Testsuite(unittest.TestCase):
         # Assert that one VM was acquires. The number of avaliable VMs
         # will now be less max.
         details = hndl.detail_get()
-        self.assertTrue(details["vm_available"] < current_vms)
+        self.assertTrue(details["resource_available"] < current_vms)
         hndl.release()
         for _ in range(40 * 6):
             time.sleep(5)
             details = hndl.detail_get()
             self.assertTrue(details)
-            if details["vm_available"] == current_vms:
+            if details["resource_available"] == current_vms:
                 return
         details = hndl.detail_get()
         self.assertTrue(details)
-        self.assertEqual(details["vm_available"], current_vms)
+        self.assertEqual(details["resource_available"], current_vms)
 
-    def test_vm_context_manager(self):
+    def test_resource_context_manager(self):
         """ show using client context manager. """
 
         ##
         # Shows an example of the context manager.
-        with resource.Hndl(conftest.GLOBAL["hostname"],
-                           conftest.GLOBAL["profile"], 10) as hndl:
+        with resource.Hndl(GLOBAL.connection, GLOBAL.name, 10) as hndl:
             ##
             # This assert is to show that a different VM was picked.
             self.assertTrue(hndl.vm.id is not None)
@@ -82,11 +80,10 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
-                             conftest.GLOBAL["profile"], 10)
+        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10)
         details = hndl.detail_get()
         self.assertTrue(details)
-        self.assertEqual(details["vm_max"], 3)
+        self.assertEqual(details["resource_max"], 3)
         ##
 
     def test_blocking(self):
@@ -100,8 +97,8 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         for count in range(3):
-            with resource.Hndl(conftest.GLOBAL["hostname"],
-                               conftest.GLOBAL["profile"], 10, True) as hndl:
+            with resource.Hndl(GLOBAL.hostname, GLOBAL["profile"], 10,
+                               True) as hndl:
                 ##
                 # This assert is to show that a different VM was picked.
                 self.assertTrue(hndl.vm)
@@ -109,8 +106,7 @@ class Testsuite(unittest.TestCase):
                 ##
         ##
 
-        hndl = resource.Hndl(conftest.GLOBAL["hostname"],
-                             conftest.GLOBAL["profile"], 10, True)
+        hndl = resource.Hndl(GLOBAL["hostname"], GLOBAL["profile"], 10, True)
         hndl.acquire(True)
         self.assertTrue(hndl.vm.ip_addr not in ip_addresses)
         hndl.release()
@@ -118,7 +114,7 @@ class Testsuite(unittest.TestCase):
         count = 0
         for _ in range(100):
             details = hndl.detail_get()
-            count = details["vm_available"]
+            count = details["resource_available"]
             if count == 3:
                 return
             time.sleep(20)
