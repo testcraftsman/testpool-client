@@ -97,8 +97,7 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         for count in range(3):
-            with resource.Hndl(GLOBAL.hostname, GLOBAL["profile"], 10,
-                               True) as hndl:
+            with resource.Hndl(GLOBAL.hostname, GLOBAL.name, 10, True) as hndl:
                 ##
                 # This assert is to show that a different VM was picked.
                 self.assertTrue(hndl.vm)
@@ -106,7 +105,7 @@ class Testsuite(unittest.TestCase):
                 ##
         ##
 
-        hndl = resource.Hndl(GLOBAL["hostname"], GLOBAL["profile"], 10, True)
+        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10, True)
         hndl.acquire(True)
         self.assertTrue(hndl.vm.ip_addr not in ip_addresses)
         hndl.release()

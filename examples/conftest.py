@@ -24,6 +24,10 @@ import testpoolclient.pool
 # IP address. These values are identical to the quick start guide on
 # purpose. All that is needed, is a VM called test.template.
 class Global(object):
+    """ Content for tests. """
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, name, connection, product, template_name, count):
         self.name = name
         self.connection = connection
@@ -34,7 +38,7 @@ class Global(object):
 
 ##
 # "connection": "qemu:///system",
-GLOBAL = Global("testpoolexample", "127.0.0.1", "fake",  "test.template", 3)
+GLOBAL = Global("testpoolexample", "127.0.0.1", "fake", "test.template", 3)
 
 
 def teardown_db():
