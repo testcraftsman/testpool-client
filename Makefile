@@ -35,4 +35,5 @@ pycodestyle::
 	pycodestyle $(PYTHON_FILES)
 
 build::
+	git describe --abbrev=0 --tag > VERSION
 	python ./setup.py sdist

@@ -9,7 +9,7 @@ from setuptools.command.install import install
 AUTHOR = "Mark Hamilton"
 AUTHOR_EMAIL = "mark.lee.hamilton@gmail.com"
 
-CMD = "git describe --abbrev=0 --tag"
+CMD = "cat VERSION"
 VERSION = subprocess.check_output(CMD, shell=True).replace("\n", "")
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:

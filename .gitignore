@@ -13,3 +13,4 @@ http/static
 *.tar.gz
 deb_dist
 .pytest_cache
+VERSION
