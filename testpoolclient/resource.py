@@ -12,6 +12,7 @@ import testpool.core.exceptions
 
 class ResourceError(testpool.core.exceptions.TestpoolError):
     """ Thrown when a resource is not available. """
+
     def __init__(self, message):
         super(testpool.core.exceptions.TestpoolError, self).__init__(message)
 
@@ -25,82 +26,55 @@ def _renew(*args, **kwargs):
     hndl.threading = threading.Timer(interval, _renew, args=(hndl,))
 
 
-class Hndl(object):
+class Manager(object):
     """ Acquires a VM and renews its usage until this object is deleted.
 
     As long as the object exists, the VM acquired will be renewed.
     """
-    def __init__(self, ip_addr, profile_name, expiration=60,
-                 blocking=False):
+    def __init__(self, ip_addr, profile_name, expiration=60, interval=60):
         """ Acquire a VM given the parameters.
 
         @param expiration The time in seconds.
-        @param blocking Wait for VM to be available.
         """
         self.profile_name = profile_name
         self.ip_addr = ip_addr
         self.expiration = expiration
-        self.blocking = blocking
-        self.vm = None
-        self.threading = None
+        self.interval = interval
 
-    def __enter__(self):
-        """ Operations are handled in the constructor. """
-
-        self.acquire(self.blocking)
-        return self
-
-    def __exit__(self, exception_type, exception_value, traceback):
-        """ Operations are handled in the constructor. """
-        self.release()
-
-    def acquire(self, blocking=None):
+    def acquire(self, blocking=True, expiration=None):
         """ Acquire an available VM. """
 
-        self.release()
+        if expiration is None:
+            expiration = self.expiration
 
-        blocking = self.blocking if blocking is None else blocking
-        params = {"expiration": self.expiration}
-        interval = self.expiration/2
+        params = {"expiration": expiration}
 
         while True:
             try:
                 resp = requests.get(self._url_get("acquire"),
                                     urllib.urlencode(params))
                 resp.raise_for_status()
-                self.vm = json.loads(resp.text,
-                                     object_hook=lambda d: Namespace(**d))
-                self.threading = threading.Timer(interval, _renew,
-                                                 args=(self,))
-                self.threading.start()
-                return self
+                vm = json.loads(resp.text,
+                                object_hook=lambda d: Namespace(**d))
+                return vm
             except Exception:
                 if blocking:
-                    time.sleep(interval)
+                    time.sleep(self.interval)
                     continue
                 raise ResourceError("all VMs busy or pending")
         return None
 
-    def release(self):
+    def release(self, vm):
         """ Release VM resource. """
 
-        if self.threading is None:
+        if vm is None:
             return
-
-        if self.vm is None:
-            return
-
-        self.threading.cancel()
-        self.threading = None
-
         requests.get(self._url_get("release"))
-        self.vm = None
 
-    def renew(self):
+    def renew(self, vm):
         """ Return usage of the VM. """
 
-        params = {"id": self.vm.id,
-                  "expiration": 100}
+        params = {"id": vm.id, "expiration": 100}
         resp = requests.get(self._url_get("renew"), urllib.urlencode(params))
 
     def _url_get(self, action):
@@ -109,11 +83,38 @@ class Hndl(object):
         ##
         # This should be a config.
         url = "http://%s:8000/testpool/api/v1/" % self.ip_addr
-        return url + "profile/%s/%s" % (action, self.profile_name)
+        return url + "pool/%s/%s" % (action, self.profile_name)
 
     def detail_get(self):
         """ Create URL for the given action. """
 
         resp = requests.get(self._url_get("detail"))
         resp.raise_for_status()
-        return json.loads(resp.text)
+        pool = json.loads(resp.text, object_hook=lambda d: Namespace(**d))
+        return pool
+
+
+class CtxtMgr(object):
+    """ Context Manager for resources. """
+
+    def __init__(self, mgr, blocking=True):
+        """ Constructor.
+
+        @param mgr (Manager) Handle to manager.
+        @param blocking Wait for VM to be available.
+        """
+
+        self.mgr = mgr
+        self.blocking = blocking
+        self.vm = None
+
+    def __enter__(self):
+        """ Operations are handled in the constructor. """
+
+        self.vm = self.mgr.acquire(self.blocking)
+        return self.vm
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        """ Operations are handled in the constructor. """
+
+        self.mgr.release(self.vm)

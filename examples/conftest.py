@@ -66,6 +66,7 @@ def setup_db(request):
     pools = pool_mgr.list()
     pools = [item for item in pools if item["name"] == GLOBAL.name]
     if len(pools) == 0:  # pylint: disable=len-as-condition
+        logging.info("add pool %s", GLOBAL.name)
         pool_mgr.add(GLOBAL.name, GLOBAL.product, GLOBAL.connection,
                      GLOBAL.template_name, GLOBAL.count)
 

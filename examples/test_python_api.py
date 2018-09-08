@@ -38,40 +38,42 @@ class Testsuite(unittest.TestCase):
 
         Acquire a single VM. Demonstrate how to determine the VMs IP address.
         """
-        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10, True)
-        current_vms = hndl.detail_get()["resource_available"]
-        hndl.acquire()
+        mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10, True)
+        current_vms = mgr.detail_get().resource_available
+        vm = mgr.acquire()
         ##
         # The ip attribute provides the IP address of the VM.
-        self.assertTrue(hndl.ip_addr is not None)
+        self.assertTrue(vm.ip_addr is not None)
         ##
 
         ##
         # Assert that one VM was acquires. The number of avaliable VMs
         # will now be less max.
-        details = hndl.detail_get()
-        self.assertTrue(details["resource_available"] < current_vms)
-        hndl.release()
+        details = mgr.detail_get()
+        self.assertTrue(details.resource_available < current_vms)
+        mgr.release(vm)
         for _ in range(40 * 6):
             time.sleep(5)
-            details = hndl.detail_get()
+            details = mgr.detail_get()
             self.assertTrue(details)
-            if details["resource_available"] == current_vms:
+            if details.resource_available == current_vms:
                 return
-        details = hndl.detail_get()
+        details = mgr.detail_get()
         self.assertTrue(details)
-        self.assertEqual(details["resource_available"], current_vms)
+        self.assertEqual(details.resource_available, current_vms)
 
     def test_resource_context_manager(self):
         """ show using client context manager. """
 
         ##
         # Shows an example of the context manager.
-        with resource.Hndl(GLOBAL.connection, GLOBAL.name, 10) as hndl:
+        mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10)
+        with resource.CtxtMgr(mgr) as vm:
             ##
             # This assert is to show that a different VM was picked.
-            self.assertTrue(hndl.vm.id is not None)
-            self.assertTrue(hndl.vm.ip_addr is not None)
+            self.assertTrue(vm is not None)
+            self.assertTrue(vm.id is not None)
+            self.assertTrue(vm.ip_addr is not None)
             ##
         ##
 
@@ -80,10 +82,10 @@ class Testsuite(unittest.TestCase):
 
         ##
         # Shows an example of the context manager.
-        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10)
+        hndl = resource.Manager(GLOBAL.connection, GLOBAL.name, 10)
         details = hndl.detail_get()
         self.assertTrue(details)
-        self.assertEqual(details["resource_max"], 3)
+        self.assertEqual(details.resource_max, 3)
         ##
 
     def test_blocking(self):
@@ -93,27 +95,31 @@ class Testsuite(unittest.TestCase):
         there should never be an exception thrown.
         """
 
-        ip_addresses = set()
+        names = set()
+
+        mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10, True)
+        details = mgr.detail_get()
+        self.assertEqual(details.resource_max, 3)
+        count = details.resource_max - 1
+
         ##
         # Shows an example of the context manager.
-        for count in range(3):
-            with resource.Hndl(GLOBAL.hostname, GLOBAL.name, 10, True) as hndl:
+        for count in range(count):
+            with resource.CtxtMgr(mgr) as vm:
                 ##
                 # This assert is to show that a different VM was picked.
-                self.assertTrue(hndl.vm)
-                ip_addresses.add(hndl.vm.ip_addr)
+                self.assertTrue(vm is not None)
+                names.add(vm.name)
                 ##
         ##
-
-        hndl = resource.Hndl(GLOBAL.connection, GLOBAL.name, 10, True)
-        hndl.acquire(True)
-        self.assertTrue(hndl.vm.ip_addr not in ip_addresses)
-        hndl.release()
+        vm = mgr.acquire(True)
+        self.assertTrue(vm.name not in names)
+        mgr.release(vm)
 
         count = 0
         for _ in range(100):
-            details = hndl.detail_get()
-            count = details["resource_available"]
+            details = mgr.detail_get()
+            count = details.resource_available
             if count == 3:
                 return
             time.sleep(20)
