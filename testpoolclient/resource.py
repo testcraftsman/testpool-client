@@ -71,6 +71,22 @@ class Manager(object):
             return
         requests.get(self._url_get("release"))
 
+    def release_all(self):
+        """ Release all resources. """
+
+        requests.get(self._url_get("release-all"))
+
+    def resource_wait(self, resource_available=None):
+        """ Release all resources. """
+
+        if resource_available:
+            resource_available = details.resource_available
+
+        details = self.detail_get()
+        while resource_available < details.resource_max:
+            time.sleep(self.interval)
+            details = self.detail_get()
+
     def renew(self, vm):
         """ Return usage of the VM. """
 

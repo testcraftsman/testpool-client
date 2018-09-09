@@ -33,6 +33,12 @@ from conftest import GLOBAL
 class Testsuite(unittest.TestCase):
     """ Demonstrate testpool.client API. """
 
+    def tearDown(self):
+        """ Release all resources. """
+        mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10, True)
+        mgr.release_all()
+        mgr.resource_wait()
+
     def test_resource_acquire(self):
         """ test_resource_acquire.
 
@@ -40,10 +46,10 @@ class Testsuite(unittest.TestCase):
         """
         mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10, True)
         current_vms = mgr.detail_get().resource_available
-        vm = mgr.acquire()
+        vm1 = mgr.acquire()
         ##
         # The ip attribute provides the IP address of the VM.
-        self.assertTrue(vm.ip_addr is not None)
+        self.assertTrue(vm1.ip_addr is not None)
         ##
 
         ##
@@ -51,7 +57,7 @@ class Testsuite(unittest.TestCase):
         # will now be less max.
         details = mgr.detail_get()
         self.assertTrue(details.resource_available < current_vms)
-        mgr.release(vm)
+        mgr.release(vm1)
         for _ in range(40 * 6):
             time.sleep(5)
             details = mgr.detail_get()
@@ -68,12 +74,12 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10)
-        with resource.CtxtMgr(mgr) as vm:
+        with resource.CtxtMgr(mgr) as vm1:
             ##
             # This assert is to show that a different VM was picked.
-            self.assertTrue(vm is not None)
-            self.assertTrue(vm.id is not None)
-            self.assertTrue(vm.ip_addr is not None)
+            self.assertTrue(vm1 is not None)
+            self.assertTrue(vm1.id is not None)
+            self.assertTrue(vm1.ip_addr is not None)
             ##
         ##
 
@@ -105,16 +111,16 @@ class Testsuite(unittest.TestCase):
         ##
         # Shows an example of the context manager.
         for count in range(count):
-            with resource.CtxtMgr(mgr) as vm:
+            with resource.CtxtMgr(mgr) as vm1:
                 ##
                 # This assert is to show that a different VM was picked.
-                self.assertTrue(vm is not None)
-                names.add(vm.name)
+                self.assertTrue(vm1 is not None)
+                names.add(vm1.name)
                 ##
         ##
-        vm = mgr.acquire(True)
-        self.assertTrue(vm.name not in names)
-        mgr.release(vm)
+        vm1 = mgr.acquire(True)
+        self.assertTrue(vm1.name not in names)
+        mgr.release(vm1)
 
         count = 0
         for _ in range(100):
@@ -124,3 +130,19 @@ class Testsuite(unittest.TestCase):
                 return
             time.sleep(20)
         raise ValueError("never recovered all three VMs.")
+
+    def test_non_blocking(self):
+        """ test_non_blocking check non-blocking. """
+
+        mgr = resource.Manager(GLOBAL.connection, GLOBAL.name, 10, True)
+        details = mgr.detail_get()
+        self.assertEqual(details.resource_max, 3)
+
+        ##
+        # Shows an example of the context manager.
+        vms = [mgr.acquire() for _ in range(details.resource_max)]
+        self.assertTrue(vms)
+        ##
+
+        # Here we check for non-blocking.
+        self.assertRaises(resource.ResourceError, mgr.acquire, False)
