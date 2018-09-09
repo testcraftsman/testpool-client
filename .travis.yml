@@ -7,7 +7,7 @@ python:
 install:
   - sudo -H apt-get update -qq
   - sudo -H cat requirements.system | sudo xargs apt-get -y install
-  - sudo apt upgrade --assume-yes dpkg
+  - sudo apt upgrade --assume-yes
   - wget https://github.com/testcraftsman/testpool/releases/download/0.1.9/python-testpool_0.1.9-1_all.deb
   - sudo dpkg -i python-testpool_0.1.9-1_all.deb
   - pip install -r requirements.txt
