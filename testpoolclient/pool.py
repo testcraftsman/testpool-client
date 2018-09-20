@@ -73,7 +73,14 @@ class Manager(object):
         return json.loads(resp.text)
 
     def add(self, name, product, connection, template_name, resource_max):
-        """ Remove a pool. """
+        """ Add a pool given the name and additional parameters.
+
+        @param name (str): Name of the pool used to identify the profile.
+        @param product: A supported product i.e. docker.
+        @param connection: Depends on the product.
+        @param template_name: The template name which depends on the product. 
+        @param resource_max: The maximum number of resources.
+        """
 
         params = {
             "connection": connection,
